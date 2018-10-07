@@ -35,7 +35,7 @@
 	'use strict'
 
 	var namespace = 'addImage_';
-	
+
 	var imageFileTypeHeaders = {
 		PNG : [[0x89, 0x50, 0x4e, 0x47]],
 		TIFF: [
@@ -60,7 +60,7 @@
 	}
     /**
     * Recognize filetype of Image by magic-bytes
-    * 
+    *
     * https://en.wikipedia.org/wiki/List_of_file_signatures
     *
     * @name getImageFileTypeByImageData
@@ -68,7 +68,7 @@
     * @function
     * @param {string|arraybuffer} imageData imageData as base64 encoded DataUrl or arraybuffer
     * @param {string} format format of file if filetype-recognition fails, e.g. 'JPEG'
-    * 
+    *
     * @returns {string} filetype of Image
     */
 	jsPDFAPI.getImageFileTypeByImageData = function (imageData, fallbackFormat) {
@@ -77,17 +77,17 @@
 		var j;
 		var result = 'UNKNOWN';
 		var headerSchemata;
-		var compareResult; 
+		var compareResult;
 		var fileType;
-		
+
 		if (jsPDFAPI.isArrayBufferView(imageData)) {
 			imageData = jsPDFAPI.arrayBufferToBinaryString(imageData);
 		}
-		
+
 		for (fileType in imageFileTypeHeaders) {
 			headerSchemata = imageFileTypeHeaders[fileType];
 			for (i = 0; i < headerSchemata.length; i += 1) {
-				compareResult = true; 
+				compareResult = true;
 				for (j = 0; j < headerSchemata[i].length; j += 1) {
 					if (headerSchemata[i][j] === undefined) {
 						continue;
@@ -231,10 +231,10 @@
 		return imageIndex;
 	}
 	, notDefined = function(value) {
-		return typeof value === 'undefined' || value === null || value.length === 0; 
+		return typeof value === 'undefined' || value === null || value.length === 0;
 	}
 	, generateAliasFromData = function(data) {
-		return typeof data === 'string' && jsPDFAPI.sHashCode(data);
+		return data.alias || (typeof data === 'string' && jsPDFAPI.sHashCode(data));
 	}
 	, isImageTypeSupported = function(type) {
 		return (typeof jsPDFAPI["process" + type.toUpperCase()] === "function");
@@ -309,11 +309,11 @@
 		h = dims[1];
 
 		images[index] = info;
-		
+
 		if (rotation) {
 		    rotation *= (Math.PI / 180);
 		    var c = Math.cos(rotation);
-		    var s = Math.sin(rotation);	
+		    var s = Math.sin(rotation);
 			//like in pdf Reference do it 4 digits instead of 2
 		    var f4 = function(number) {
 				return number.toFixed(4);
@@ -376,9 +376,9 @@
 
 	/**
 	* @name sHashCode
-	* @function 
+	* @function
 	* @param {string} str
-	* @returns {string} 
+	* @returns {string}
 	*/
 	jsPDFAPI.sHashCode = function(str) {
 		str = str || "";
@@ -389,7 +389,7 @@
 	* @name isString
 	* @function
 	* @param {any} object
-	* @returns {boolean} 
+	* @returns {boolean}
 	*/
 	jsPDFAPI.isString = function(object) {
 		return typeof object === 'string';
@@ -401,34 +401,34 @@
     * @public
     * @function
     * @param {String} possible Base64-String
-    * 
+    *
     * @returns {boolean}
     */
 	jsPDFAPI.validateStringAsBase64 = function(possibleBase64String) {
 		possibleBase64String = possibleBase64String || '';
-		
+
 		var result = true;
-		
+
 		if (possibleBase64String.length % 4 !== 0) {
 			result = false;
 		}
-		
+
 		if (/[A-Za-z0-9\/]+/.test(possibleBase64String.substr(0, possibleBase64String.length - 2)) === false) {
 			result = false;
 		}
-		
-		
+
+
 		if (/[A-Za-z0-9\/][A-Za-z0-9+\/]|[A-Za-z0-9+\/]=|==/.test(possibleBase64String.substr(-2)) === false) {
 			result = false;
 		}
-		return result; 
+		return result;
 	};
-	
+
 	/**
 	 * Strips out and returns info from a valid base64 data URI
 	 *
 	 * @name extractInfoFromBase64DataURI
-	 * @function 
+	 * @function
 	 * @param {string} dataUrl a valid data URI of format 'data:[<MIME-type>][;base64],<data>'
 	 * @returns {Array}an Array containing the following
 	 * [0] the complete data URI
@@ -442,7 +442,7 @@
 
 	/**
 	 * Check to see if ArrayBuffer is supported
-	 * 
+	 *
 	 * @name supportsArrayBuffer
 	 * @function
 	 * @returns {boolean}
@@ -455,9 +455,9 @@
 	 * Tests supplied object to determine if ArrayBuffer
 	 *
 	 * @name isArrayBuffer
-	 * @function 
+	 * @function
 	 * @param {Object} object an Object
-	 * 
+	 *
 	 * @returns {boolean}
 	 */
 	jsPDFAPI.isArrayBuffer = function(object) {
@@ -470,7 +470,7 @@
 	 * Tests supplied object to determine if it implements the ArrayBufferView (TypedArray) interface
 	 *
 	 * @name isArrayBufferView
-	 * @function 
+	 * @function
 	 * @param {Object} object an Object
 	 * @returns {boolean}
 	 */
@@ -498,7 +498,7 @@
     * @public
     * @function
     * @param {ArrayBuffer} BinaryString with ImageData
-    * 
+    *
     * @returns {Uint8Array}
     */
 	jsPDFAPI.binaryStringToUint8Array = function(binary_string) {
@@ -520,15 +520,15 @@
 	    * @public
 	    * @function
 	    * @param {ArrayBuffer} ArrayBuffer with ImageData
-	    * 
+	    *
 	    * @returns {String}
 	    */
 	jsPDFAPI.arrayBufferToBinaryString = function(buffer) {
-		
+
 		if (typeof atob === "function") {
 			return atob(this.arrayBufferToBase64(buffer));
 		}
-		
+
 		if(typeof TextDecoder === "function"){
 			var decoder = new TextDecoder('ascii');
 			// test if the encoding is supported
@@ -536,7 +536,7 @@
 				return decoder.decode(buffer);
 			}
 		}
-		
+
 		//Fallback-solution
 		var data = (this.isArrayBuffer(buffer)) ? buffer : new Uint8Array(buffer);
 		var chunkSizeForSlice = 0x5000;
@@ -559,7 +559,7 @@
 	* @param {arraybuffer} arrayBuffer
     * @public
     * @function
-    * 
+    *
     * @returns {string}
     */
 	jsPDFAPI.arrayBufferToBase64 = function(arrayBuffer) {
@@ -615,14 +615,14 @@
 	};
 
 	/**
-    * 
+    *
 	* @name createImageInfo
-	* @param {Object} data 
+	* @param {Object} data
 	* @param {number} wd width
 	* @param {number} ht height
 	* @param {Object} cs colorSpace
 	* @param {number} bpc bits per channel
-	* @param {any} f 
+	* @param {any} f
 	* @param {number} imageIndex
 	* @param {string} alias
 	* @param {any} dp
@@ -632,7 +632,7 @@
 	* @param {any} p
 	* @public
     * @function
-    * 
+    *
     * @returns {Object}
     */
 	jsPDFAPI.createImageInfo = function(data, wd, ht, cs, bpc, f, imageIndex, alias, dp, trns, pal, smask, p) {
@@ -671,14 +671,14 @@
 	    * @param {string} alias alias of the image (if used multiple times)
 	    * @param {string} compression compression of the generated JPEG, can have the values 'NONE', 'FAST', 'MEDIUM' and 'SLOW'
 	    * @param {number} rotation rotation of the image in degrees (0-359)
-	    * 
+	    *
 	    * @returns jsPDF
 	    */
 	jsPDFAPI.addImage = function(imageData, format, x, y, w, h, alias, compression, rotation) {
 		'use strict'
 
 		var tmpImageData = '';
-		
+
 		if(typeof format !== 'string') {
 			var tmp = h;
 			h = w;
@@ -725,7 +725,7 @@
 			if (!(info = checkImagesForAlias(alias, images))) {
 				if(this.isString(imageData)) {
 					tmpImageData = this.convertStringToImageData(imageData);
-				
+
 					if (tmpImageData !== '') {
 						imageData = tmpImageData;
 					} else {
@@ -784,7 +784,7 @@
 		if(base64Info !== null) {
 			if (jsPDFAPI.validateStringAsBase64(base64Info[3])) {
 				imageData = atob(base64Info[3]);//convert to binary string
-			} 
+			}
 		} else if (jsPDFAPI.validateStringAsBase64(stringData)){
 			imageData = atob(stringData);
 		}
@@ -879,7 +879,7 @@
 		var filter = this.decode.DCT_DECODE,
 			bpc = 8,
 			dims;
-		
+
 		if (!this.isString(data) && !this.isArrayBuffer(data) && !this.isArrayBufferView(data)) {
 			return null;
 		}
@@ -887,7 +887,7 @@
 		if(this.isString(data)) {
 			dims = getJpegSize(data);
 		}
-		
+
 		if(this.isArrayBuffer(data)) {
 			data = new Uint8Array(data);
 		}
@@ -897,15 +897,15 @@
 
 			// if we already have a stored binary string rep use that
 			data = dataAsBinaryString || this.arrayBufferToBinaryString(data);
-			
+
 		}
-		
+
 		if (colorSpace === undefined) {
 			switch (dims.numcomponents) {
 				case 1:
-					colorSpace = this.color_spaces.DEVICE_GRAY; 
+					colorSpace = this.color_spaces.DEVICE_GRAY;
 					break;
-				case 4: 
+				case 4:
 					colorSpace = this.color_spaces.DEVICE_CMYK;
 					break;
 				default:
@@ -914,7 +914,7 @@
 					break;
 			}
 		}
-		
+
 		return this.createImageInfo(data, dims.width, dims.height, colorSpace, bpc, filter, index, alias);
 	};
 
@@ -924,7 +924,7 @@
 	jsPDFAPI.processJPG = function(/*data, index, alias, compression, dataAsBinaryString*/) {
 		return this.processJPEG.apply(this, arguments);
 	}
-	
+
 	/**
 	* @name loadImageFile
 	* @function
@@ -936,50 +936,50 @@
 		sync = sync || true;
 		callback = callback || function () {};
 		var isNode = Object.prototype.toString.call(typeof process !== 'undefined' ? process : 0) === '[object process]';
-		
+
 		var xhrMethod = function (url, sync, callback) {
 			var req = new XMLHttpRequest();
 			var byteArray = [];
 			var i = 0;
-			
+
 			var sanitizeUnicode = function (data) {
 				var dataLength = data.length;
 				var StringFromCharCode = String.fromCharCode;
-				
+
 				//Transform Unicode to ASCII
 				for (i = 0; i < dataLength; i += 1) {
 					byteArray.push(StringFromCharCode(data.charCodeAt(i) & 0xff))
 				}
 				return byteArray.join("");
 			}
-			
+
 			req.open('GET', url, !sync)
 			// XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com]
 			req.overrideMimeType('text\/plain; charset=x-user-defined');
-			
+
 			if (sync === false) {
 				req.onload = function () {
 					return sanitizeUnicode(this.responseText);
 				};
 			}
 			req.send(null)
-			
+
 			if (req.status !== 200) {
 				console.warn('Unable to load file "' + url + '"');
 				return;
 			}
-			
+
 			if (sync) {
 				return sanitizeUnicode(req.responseText);
 			}
 		};
-		
+
 		//we have a browser and probably no CORS-Problem
 		if (typeof window !== undefined && typeof location === "object" && location.protocol.substr(0,4) === "http") {
 			return xhrMethod(path, sync, callback);
 		}
 	}
-	
+
 	/**
 	* @name getImageProperties
 	* @function
@@ -998,7 +998,7 @@
 
 		if(this.isString(imageData)) {
 			tmpImageData = this.convertStringToImageData(imageData);
-		
+
 			if (tmpImageData !== '') {
 				imageData = tmpImageData;
 			} else {
@@ -1042,5 +1042,5 @@
 			bitsPerComponent: info.bpc
 		};
 	}
-	
+
 })(jsPDF.API);

@@ -568,8 +568,8 @@
 
     /** @license
      * jsPDF - PDF Document creation from JavaScript
-     * Version 1.4.1 Built on 2018-10-07T01:43:13.444Z
-     *                           CommitID 88901848cb
+     * Version 1.4.1 Built on 2018-10-07T02:10:55.829Z
+     *                           CommitID e2486ad9d2
      *
      * Copyright (c) 2010-2016 James Hall <james@parall.ax>, https://github.com/MrRio/jsPDF
      *               2010 Aaron Spike, https://github.com/acspike
@@ -5209,7 +5209,7 @@
         ]
         /**
         * Recognize filetype of Image by magic-bytes
-        * 
+        *
         * https://en.wikipedia.org/wiki/List_of_file_signatures
         *
         * @name getImageFileTypeByImageData
@@ -5217,7 +5217,7 @@
         * @function
         * @param {string|arraybuffer} imageData imageData as base64 encoded DataUrl or arraybuffer
         * @param {string} format format of file if filetype-recognition fails, e.g. 'JPEG'
-        * 
+        *
         * @returns {string} filetype of Image
         */
 
@@ -5400,7 +5400,7 @@
         return typeof value === 'undefined' || value === null || value.length === 0;
       },
           generateAliasFromData = function generateAliasFromData(data) {
-        return typeof data === 'string' && jsPDFAPI.sHashCode(data);
+        return data.alias || typeof data === 'string' && jsPDFAPI.sHashCode(data);
       },
           isImageTypeSupported = function isImageTypeSupported(type) {
         return typeof jsPDFAPI["process" + type.toUpperCase()] === "function";
@@ -5553,9 +5553,9 @@
       };
       /**
       * @name sHashCode
-      * @function 
+      * @function
       * @param {string} str
-      * @returns {string} 
+      * @returns {string}
       */
 
       jsPDFAPI.sHashCode = function (str) {
@@ -5569,7 +5569,7 @@
       * @name isString
       * @function
       * @param {any} object
-      * @returns {boolean} 
+      * @returns {boolean}
       */
 
 
@@ -5583,7 +5583,7 @@
       * @public
       * @function
       * @param {String} possible Base64-String
-      * 
+      *
       * @returns {boolean}
       */
 
@@ -5610,7 +5610,7 @@
        * Strips out and returns info from a valid base64 data URI
        *
        * @name extractInfoFromBase64DataURI
-       * @function 
+       * @function
        * @param {string} dataUrl a valid data URI of format 'data:[<MIME-type>][;base64],<data>'
        * @returns {Array}an Array containing the following
        * [0] the complete data URI
@@ -5625,7 +5625,7 @@
       };
       /**
        * Check to see if ArrayBuffer is supported
-       * 
+       *
        * @name supportsArrayBuffer
        * @function
        * @returns {boolean}
@@ -5639,9 +5639,9 @@
        * Tests supplied object to determine if ArrayBuffer
        *
        * @name isArrayBuffer
-       * @function 
+       * @function
        * @param {Object} object an Object
-       * 
+       *
        * @returns {boolean}
        */
 
@@ -5654,7 +5654,7 @@
        * Tests supplied object to determine if it implements the ArrayBufferView (TypedArray) interface
        *
        * @name isArrayBufferView
-       * @function 
+       * @function
        * @param {Object} object an Object
        * @returns {boolean}
        */
@@ -5672,7 +5672,7 @@
       * @public
       * @function
       * @param {ArrayBuffer} BinaryString with ImageData
-      * 
+      *
       * @returns {Uint8Array}
       */
 
@@ -5697,7 +5697,7 @@
       * @public
       * @function
       * @param {ArrayBuffer} ArrayBuffer with ImageData
-      * 
+      *
       * @returns {String}
       */
 
@@ -5738,7 +5738,7 @@
       * @param {arraybuffer} arrayBuffer
          * @public
          * @function
-         * 
+         *
          * @returns {string}
          */
 
@@ -5793,14 +5793,14 @@
         return base64;
       };
       /**
-         * 
+         *
       * @name createImageInfo
-      * @param {Object} data 
+      * @param {Object} data
       * @param {number} wd width
       * @param {number} ht height
       * @param {Object} cs colorSpace
       * @param {number} bpc bits per channel
-      * @param {any} f 
+      * @param {any} f
       * @param {number} imageIndex
       * @param {string} alias
       * @param {any} dp
@@ -5810,7 +5810,7 @@
       * @param {any} p
       * @public
          * @function
-         * 
+         *
          * @returns {Object}
          */
 
@@ -5850,7 +5850,7 @@
       * @param {string} alias alias of the image (if used multiple times)
       * @param {string} compression compression of the generated JPEG, can have the values 'NONE', 'FAST', 'MEDIUM' and 'SLOW'
       * @param {number} rotation rotation of the image in degrees (0-359)
-      * 
+      *
       * @returns jsPDF
       */
 
